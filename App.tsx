@@ -1,7 +1,7 @@
 import { StatusBar, StyleSheet, Text, View } from "react-native";
 import { StackNavigator } from "./navigation/AppNavigation";
 import { NavigationContainer } from "@react-navigation/native";
-import { DrawerNavigator } from "./navigation/DrawerNavigation";
+import { NoteCard } from "./components/NoteCard";
 
 export default function App() {
   return (
