@@ -9,8 +9,9 @@ import {
 export interface NoteType {
   title: string;
   note: string;
-  isArchived: Boolean;
-  isPinned: Boolean;
+  isArchived: boolean;
+  isPinned: boolean;
+  onPress?: () => void;
 }
 
 interface NotesContextType {
