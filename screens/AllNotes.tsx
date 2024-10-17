@@ -9,7 +9,7 @@ type RootStackParamList = {
   "All Notes": undefined;
   "Create Note": undefined;
   "Note Details": undefined;
-  "Login/Signup": undefined;
+  Login: undefined;
 };
 
 type AllNotesScreenNavigationProp = NativeStackNavigationProp<

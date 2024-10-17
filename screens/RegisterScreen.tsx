@@ -10,6 +10,7 @@ import {
 import { Button } from "react-native-paper";
 import appIcon from "../assets/icons/logo.png";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
 
 type RootStackParamList = {
   "All Notes": undefined;
@@ -19,18 +20,18 @@ type RootStackParamList = {
   Register: undefined;
 };
 
-type RegisterScreenNavigationProp = NativeStackNavigationProp<
+type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  "Login"
+  "Register"
 >;
 
 type Props = {
-  navigation: RegisterScreenNavigationProp;
+  navigation: LoginScreenNavigationProp;
 };
 
-export const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const handleRegisterPress = () => {
-    navigation.navigate("Register");
+export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
+  const handleLoginPress = () => {
+    navigation.navigate("Login");
   };
 
   return (
@@ -43,6 +44,28 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
             style={styles.textInput}
             selectionColor="#000"
             placeholder="Type your username here"
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="off"
+          />
+        </View>
+        <View style={styles.textAreaContainer}>
+          <Text style={styles.heading}>Number</Text>
+          <TextInput
+            style={styles.textInput}
+            selectionColor="#000"
+            placeholder="Type your number here"
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="off"
+          />
+        </View>
+        <View style={styles.textAreaContainer}>
+          <Text style={styles.heading}>Email</Text>
+          <TextInput
+            style={styles.textInput}
+            selectionColor="#000"
+            placeholder="Type your email here"
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="off"
@@ -62,10 +85,6 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
           />
         </View>
       </View>
-      <Pressable style={styles.pressable}>
-        <Text>Forget Password</Text>
-      </Pressable>
-
       <TouchableOpacity activeOpacity={0.6} style={styles.buttonContainer}>
         <Button
           textColor="white"
@@ -75,11 +94,11 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
             paddingHorizontal: 5,
           }}
         >
-          Login
+          Register
         </Button>
       </TouchableOpacity>
-      <Pressable style={styles.pressable} onPress={handleRegisterPress}>
-        <Text>Register</Text>
+      <Pressable style={styles.pressable} onPress={handleLoginPress}>
+        <Text>Login</Text>
       </Pressable>
     </View>
   );
@@ -125,6 +144,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
+    marginBottom: 10,
   },
   pressable: {
     marginBottom: 15,
