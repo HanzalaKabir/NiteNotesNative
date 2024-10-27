@@ -36,7 +36,7 @@ const NotesContext = createContext<NotesContextType>({
   setDocumentId: () => {},
 });
 
-const NotesProvider = (props: { children: React.ReactNode }) => {
+export const NotesProvider = (props: { children: React.ReactNode }) => {
   const [title, setTitle] = useState("");
   const [inputNote, setInputNote] = useState("");
   const [notes, setNotes] = useState<any[]>([]);
@@ -60,6 +60,4 @@ const NotesProvider = (props: { children: React.ReactNode }) => {
   );
 };
 
-const useNotes = () => useContext(NotesContext);
-
-export { NotesProvider, useNotes };
+export const useNotes = () => useContext(NotesContext);

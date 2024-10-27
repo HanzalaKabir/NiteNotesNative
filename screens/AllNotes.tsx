@@ -4,6 +4,7 @@ import { NoteType, useNotes } from "../context/NotesContext";
 //import { Button } from "react-native-paper";
 import plusIcon from "../assets/icons/plus.png";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAccessToken } from "../context/TokenContext";
 
 type RootStackParamList = {
   "All Notes": undefined;
@@ -23,6 +24,8 @@ type Props = {
 
 export const AllNotes: React.FC<Props> = ({ navigation }) => {
   const { notes, setNotes } = useNotes();
+  const { accessToken, setAccessToken } = useAccessToken();
+
   const newNote: NoteType = {
     title: "Note title",
     note: "Note detail",

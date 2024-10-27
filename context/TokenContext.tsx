@@ -8,9 +8,7 @@ import {
 
 interface AccessTokenContextType {
   accessToken: string | null;
-  setAccessToken:
-    | Dispatch<SetStateAction<string>>
-    | Dispatch<SetStateAction<null>>;
+  setAccessToken: Dispatch<SetStateAction<string | null>>;
 }
 
 const AccessTokenContext = createContext<AccessTokenContextType>({
@@ -18,8 +16,8 @@ const AccessTokenContext = createContext<AccessTokenContextType>({
   setAccessToken: () => {},
 });
 
-const AccssTokenProvider = (props: { children: React.ReactNode }) => {
-  const [accessToken, setAccessToken] = useState(null);
+export const AccessTokenProvider = (props: { children: React.ReactNode }) => {
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   return (
     <AccessTokenContext.Provider value={{ accessToken, setAccessToken }}>
       {props.children}
@@ -27,5 +25,4 @@ const AccssTokenProvider = (props: { children: React.ReactNode }) => {
   );
 };
 
-const useAccessToken = useContext(AccessTokenContext);
-export { AccssTokenProvider, useAccessToken };
+export const useAccessToken = () => useContext(AccessTokenContext);

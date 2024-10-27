@@ -1,21 +1,18 @@
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar } from "react-native";
 import { StackNavigator } from "./navigation/AppNavigation";
 import { NavigationContainer } from "@react-navigation/native";
+import { AccessTokenProvider } from "./context/TokenContext";
+import { NotesProvider } from "./context/NotesContext";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <StatusBar />
-      <StackNavigator />
-    </NavigationContainer>
+    <AccessTokenProvider>
+      <NotesProvider>
+        <NavigationContainer>
+          <StatusBar />
+          <StackNavigator />
+        </NavigationContainer>
+      </NotesProvider>
+    </AccessTokenProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
