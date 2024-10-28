@@ -9,10 +9,12 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useAccessToken } from "../context/TokenContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNotes } from "../context/NotesContext";
 
 const LogoutScreen = () => {
   const navigation = useNavigation();
   const { setAccessToken } = useAccessToken();
+  const { setNotes } = useNotes();
 
   const removeAccessToken = async (accessToken: string) => {
     try {
@@ -26,6 +28,7 @@ const LogoutScreen = () => {
   const handleLogout = () => {
     // Clear the access token
     removeAccessToken("accessToken");
+    setNotes([]);
     setAccessToken(null);
     navigation.goBack();
   };

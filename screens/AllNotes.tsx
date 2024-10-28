@@ -25,7 +25,8 @@ type Props = {
 
 export const AllNotes: React.FC<Props> = ({ navigation }) => {
   const { notes, setNotes } = useNotes();
-  const { accessToken, username } = useAccessToken();
+  const { accessToken, username, setUsername, setAccessToken } =
+    useAccessToken();
 
   useEffect(() => {
     if (!accessToken) {
@@ -49,20 +50,23 @@ export const AllNotes: React.FC<Props> = ({ navigation }) => {
               },
             }
           );
-          //console.log("allNotes");
+
           const response = await getNotes.json();
-          setNotes(response.note);
-          //console.log(typeof response);
+          console.log(response);
+          if (response.note) {
+            setNotes(response.note);
+          } else if (response.error) {
+            setAccessToken(null);
+            setNotes([]);
+            setUsername(null);
+          }
         }
       } catch (error) {
-        console.log(error);
-        const note = {
-          title: "Error",
-          note: "Server error",
-          isArchived: false,
-          isPinned: false,
-        };
-        setNotes([note]);
+        console.log(error, "error");
+        setNotes([]);
+        setAccessToken(null);
+        setUsername(null);
+        navigation.navigate("Login");
       }
     };
     performAsyncOperation();

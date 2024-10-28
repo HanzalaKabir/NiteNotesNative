@@ -10,7 +10,7 @@ import {
 import { Button } from "react-native-paper";
 import appIcon from "../assets/icons/logo.png";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
+import { useState, useEffect } from "react";
 
 type RootStackParamList = {
   "All Notes": undefined;
@@ -30,6 +30,58 @@ type Props = {
 };
 
 export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
+  const [signupData, setSignupData] = useState({
+    username: "",
+    email: "",
+    number: "",
+    password: "",
+  });
+
+  const [successMsg, setSuccessMsg] = useState(false);
+
+  useEffect(() => {
+    if (successMsg) {
+      const timer = setTimeout(() => {
+        navigation.navigate("Login");
+      }, 4000); // Timeout of 4 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [successMsg, navigation]);
+
+  const handleRegisterPress = async () => {
+    if (
+      signupData.email === "" ||
+      signupData.number === "" ||
+      signupData.username === "" ||
+      signupData.password === ""
+    ) {
+      console.log("Please fill and the require fields");
+    }
+    //.log(signupData);
+    try {
+      const request = await fetch(
+        `https://notes-app-backend-c0mr.onrender.com/api/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(signupData),
+        }
+      );
+      const response = await request.json();
+      //console.log(response);
+      if (response.newUser) {
+        setSuccessMsg(true);
+      } else {
+        console.log("Please try again");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleLoginPress = () => {
     navigation.navigate("Login");
   };
@@ -37,6 +89,13 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={appIcon} style={styles.appIcon} />
+      {successMsg ? (
+        <Text style={{ color: "green" }}>
+          User created successfully, please login to use the app
+        </Text>
+      ) : (
+        <></>
+      )}
       <View style={styles.InputContainer}>
         <View style={styles.textAreaContainer}>
           <Text style={styles.heading}>Username</Text>
@@ -47,6 +106,10 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="off"
+            onChangeText={(text) =>
+              setSignupData((prev) => ({ ...prev, username: text }))
+            }
+            value={signupData.username}
           />
         </View>
         <View style={styles.textAreaContainer}>
@@ -58,6 +121,14 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="off"
+            keyboardType="numeric"
+            onChangeText={(text) =>
+              setSignupData((prev) => ({
+                ...prev,
+                number: text,
+              }))
+            }
+            value={signupData.number}
           />
         </View>
         <View style={styles.textAreaContainer}>
@@ -69,6 +140,10 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             autoCapitalize="none"
             autoCorrect={false}
             autoComplete="off"
+            onChangeText={(text) =>
+              setSignupData((prev) => ({ ...prev, email: text }))
+            }
+            value={signupData.email}
           />
         </View>
         <View style={styles.textAreaContainer}>
@@ -82,6 +157,10 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             autoCorrect={false}
             secureTextEntry
             autoComplete="password"
+            onChangeText={(text) =>
+              setSignupData((prev) => ({ ...prev, password: text }))
+            }
+            value={signupData.password}
           />
         </View>
       </View>
@@ -93,6 +172,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             paddingVertical: 5,
             paddingHorizontal: 5,
           }}
+          onPress={handleRegisterPress}
         >
           Register
         </Button>
