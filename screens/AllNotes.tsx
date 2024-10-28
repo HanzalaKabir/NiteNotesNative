@@ -1,9 +1,10 @@
 import { View, StyleSheet, ScrollView, Pressable, Image } from "react-native";
 import { NoteCard } from "../components/NoteCard";
-import { NoteType, useNotes } from "../context/NotesContext";
+import { useNotes } from "../context/NotesContext";
 //import { Button } from "react-native-paper";
 import plusIcon from "../assets/icons/plus.png";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useEffect } from "react";
 import { useAccessToken } from "../context/TokenContext";
 
 type RootStackParamList = {
@@ -24,23 +25,48 @@ type Props = {
 
 export const AllNotes: React.FC<Props> = ({ navigation }) => {
   const { notes, setNotes } = useNotes();
-  const { accessToken, setAccessToken } = useAccessToken();
+  const { accessToken, username } = useAccessToken();
 
-  const newNote: NoteType = {
-    title: "Note title",
-    note: "Note detail",
-    isArchived: false,
-    isPinned: false,
-  };
-  const otherNote: NoteType = {
-    title: "Other note title",
-    note: "Note detail",
-    isArchived: false,
-    isPinned: false,
-  };
-  notes.push(otherNote);
-  notes.push(newNote);
-  setNotes(notes);
+  useEffect(() => {
+    if (!accessToken) {
+      setNotes([]);
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    const performAsyncOperation = async () => {
+      try {
+        if (accessToken && username) {
+          const getNotes = await fetch(
+            `https://notes-app-backend-c0mr.onrender.com/api/notes?username=${encodeURIComponent(
+              username
+            )}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: accessToken,
+              },
+            }
+          );
+          //console.log("allNotes");
+          const response = await getNotes.json();
+          setNotes(response.note);
+          //console.log(typeof response);
+        }
+      } catch (error) {
+        console.log(error);
+        const note = {
+          title: "Error",
+          note: "Server error",
+          isArchived: false,
+          isPinned: false,
+        };
+        setNotes([note]);
+      }
+    };
+    performAsyncOperation();
+  }, [accessToken, username]);
 
   const handlePlusIconPress = () => {
     navigation.navigate("Create Note");

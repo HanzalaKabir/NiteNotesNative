@@ -4,7 +4,6 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { AllNotes } from "../screens/AllNotes";
 import { PinnedNotes } from "../screens/PinnedNotes";
 import { ArchivedNotes } from "../screens/ArchivedNotes";
-import LogoutScreen from "../screens/LogoutScreen";
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 
 const Drawer = createDrawerNavigator();

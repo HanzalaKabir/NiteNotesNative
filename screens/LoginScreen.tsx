@@ -13,6 +13,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAccessToken } from "../context/TokenContext";
+import { jwtDecode } from "jwt-decode";
+import { CustomJwtPayload } from "../Types/jwtPayload";
 
 type RootStackParamList = {
   "All Notes": undefined;
@@ -33,7 +35,7 @@ type Props = {
 };
 
 export const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const { accessToken, setAccessToken } = useAccessToken();
+  const { accessToken, setAccessToken, setUsername } = useAccessToken();
 
   const [loginData, setLoginData] = useState({
     username: "",
@@ -75,9 +77,11 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
     const data = await responseLogin.json();
     if (data.msg === "Authentication Successful") {
       const token = data.token;
-      console.log(typeof token);
+      //console.log(token);
       setIncorrectValue(false);
       setAccessToken(token);
+      const decodedToken: CustomJwtPayload = jwtDecode(token);
+      setUsername(decodedToken.username);
     } else if (data.msg === "Incorrect password") {
       setIncorrectValue(true);
     } else if (

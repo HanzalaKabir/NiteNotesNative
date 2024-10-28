@@ -10,6 +10,8 @@ import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingScreen from "../screens/LoadingScreen";
 import LogoutScreen from "../screens/LogoutScreen";
+import { jwtDecode } from "jwt-decode";
+import { CustomJwtPayload } from "../Types/jwtPayload";
 
 const Stack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -49,7 +51,7 @@ const AppStackNavigator = () => {
 };
 
 export const StackNavigator = () => {
-  const { accessToken, setAccessToken } = useAccessToken();
+  const { accessToken, setAccessToken, setUsername } = useAccessToken();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -58,6 +60,8 @@ export const StackNavigator = () => {
         const storedToken = await AsyncStorage.getItem("accessToken");
         if (storedToken) {
           setAccessToken(storedToken);
+          const decodedToken: CustomJwtPayload = jwtDecode(storedToken);
+          setUsername(decodedToken.username);
         }
       } catch (error) {
         console.error(error);

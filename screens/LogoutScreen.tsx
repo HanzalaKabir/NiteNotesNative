@@ -1,4 +1,3 @@
-// components/LogoutModal.tsx
 import React from "react";
 import {
   View,
